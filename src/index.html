@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>The HTML5 Herald</title>
+  </head>
+
+  <body>
+    <button id="btn">Click Me</button>
+    <input type="text" id="txtInput" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script>
+      var socket = io();
+      $("#btn").on("click", () => {
+        socket.emit("message", $("#txtInput").val());
+      });
+      socket.on("message", function(msg) {
+        alert(`Server replied with this : ${msg}`);
+      });
+    </script>
+  </body>
+</html>

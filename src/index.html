@@ -8,17 +8,34 @@
   </head>
 
   <body>
+    <div id="socket_id"></div>
     <button id="btn">Click Me</button>
-    <input type="text" id="txtInput" />
+    Message :<input type="text" id="txtInput" /> Socket Id :<input
+      type="text"
+      id="idInput"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script>
       var socket = io();
+
+      //Send message to the server
       $("#btn").on("click", () => {
-        socket.emit("message", $("#txtInput").val());
+        var socket_object = {
+          message: $("#txtInput").val(),
+          socketId: $("#idInput").val()
+        };
+        socket.emit("message", socket_object);
       });
+
+      //Receive message from server
       socket.on("message", function(msg) {
         alert(`Server replied with this : ${msg}`);
+      });
+
+      //Receive socket id
+      socket.on("socket_id", function(msg) {
+        $("#socket_id").append(`Here is your socket id : ${msg}`);
       });
     </script>
   </body>

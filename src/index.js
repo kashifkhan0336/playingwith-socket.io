@@ -8,12 +8,15 @@ app.get("/", function(req, res) {
 
 io.on("connection", function(socket) {
   console.log(`a user connected at ${Date()}`);
+  socket.emit("socket_id", socket.id);
   socket.on("disconnect", function() {
     console.log("user disconnected!");
   });
   socket.on("message", function(msg) {
     console.log(`Message recevied ${msg}`);
-    io.emit("message", `Your Message : ${msg}`);
+    socket.broadcast
+      .to(msg.socketId)
+      .emit("message", `Your Message : ${msg.message}`);
   });
 });
 

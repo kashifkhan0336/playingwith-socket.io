@@ -4,16 +4,22 @@ var io = require("socket.io")(http);
 
 app.get("/", function(req, res) {
   res.sendFile(__dirname + "/index.html");
+  var ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  console.log(ip);
 });
 
 io.on("connection", function(socket) {
-  console.log(`a user connected at ${Date()}`);
+  socket.on("room", function(room) {
+    socket.join(room.room);
+    console.log(`${room.name} joined ${room.room}`);
+    socket.broadcast
+      .to(room.room)
+      .emit("room_confirm", `${room.name} joined ${room.room}`);
+    console.log(Object.keys(io.nsps["/"].adapter.rooms["vagabond"]).sockets);
+  });
+
   socket.on("disconnect", function() {
     console.log("user disconnected!");
-  });
-  socket.on("message", function(msg) {
-    console.log(`Message recevied ${msg}`);
-    io.emit("message", `Your Message : ${msg}`);
   });
 });
 

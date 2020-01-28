@@ -14,12 +14,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script>
       var socket = io();
-      $("#btn").on("click", () => {
-        socket.emit("message", $("#txtInput").val());
-      });
-      socket.on("message", function(msg) {
-        alert(`Server replied with this : ${msg}`);
-      });
+      var name = prompt("Enter your name : ");
+      var room = prompt("Enter room name : ");
+      if (!room && !name) {
+        alert("Please refresh the page and enter room/your name again");
+      } else {
+        socket.on("connect", function() {
+          var data = {
+            name: name,
+            room: room
+          };
+          socket.emit("room", data);
+        });
+        socket.on("room_confirm", function(confirmation) {
+          alert(confirmation);
+        });
+      }
     </script>
   </body>
 </html>

@@ -12,12 +12,6 @@ io.on("connection", function(socket) {
   socket.on("disconnect", function() {
     console.log("user disconnected!");
   });
-  socket.on("message", function(msg) {
-    console.log(`Message recevied ${msg}`);
-    socket.broadcast
-      .to(msg.socketId)
-      .emit("message", `Your Message : ${msg.message}`);
-  });
 });
 
 http.listen(3000, function() {
